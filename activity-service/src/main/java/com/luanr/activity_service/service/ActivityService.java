@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.luanr.activity_service.model.Activity;
-import com.luanr.activity_service.model.User;
 
 public interface ActivityService {
     Activity add(Activity activity);

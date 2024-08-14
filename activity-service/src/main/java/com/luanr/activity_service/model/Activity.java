@@ -28,13 +28,15 @@ public class Activity {
 
     private int amount;
 
+    private Long userId;
+
+    private String name;
+
     @Column(name = "created_at")
     public Date createdAt;
 
     @Column(name = "updated_at")
     public Date updatedAt;
-
-    private Long userId;
 
     @PrePersist
     void createdAt() {
