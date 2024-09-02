@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+        - id: activity
+          uri: lb://ACTIVITY-SERVICE
+          predicates:
+            - Path=/activity/**
+            
+  application:
+    name: gateway-service
+
+server:
+  port: 9999
+
+eureka:
+  client:
+    service-url:
+      default-url: http://localhost:8761/eureka/
