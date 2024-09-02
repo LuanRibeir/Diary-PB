@@ -78,4 +78,13 @@ public class UserController {
         }
     }
 
+    @PutMapping("{id}/friend/{friendId}")
+    public ResponseEntity<?> addFriendById (@PathVariable Long id, @PathVariable Long friendId) {
+        try {
+            return new ResponseEntity<>(userService.addFriendById(id, friendId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

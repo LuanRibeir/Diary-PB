@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.luanr.user_service.model.Friend;
 import com.luanr.user_service.model.User;
 import com.luanr.user_service.repository.UserRepository;
 import com.luanr.user_service.service.UserService;
@@ -53,6 +54,26 @@ public class UserServiceImpl implements UserService {
         user.setId(id);
         userRepository.save(user);
 
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<User> addFriendById(Long id, Long friendId) throws Exception{
+        if (id == friendId) {
+            throw new Exception("You can't add yourself.");
+        }
+
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception("User not found"));
+        User uFriend = userRepository.findById(friendId).orElseThrow(() -> new Exception("Friend not found"));
+
+        Friend friend = new Friend(friendId, uFriend.getName());
+
+        List<Friend> friends = user.getFriends();
+        friends.add(friend);
+        user.setFriends(friends);
+
+        userRepository.save(user);
+        
         return userRepository.findById(id);
     }
 

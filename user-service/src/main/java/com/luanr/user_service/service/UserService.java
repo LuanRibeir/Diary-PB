@@ -18,4 +18,6 @@ public interface UserService {
 
     List<User> findByName(String name);
 
+    Optional<User> addFriendById(Long id, Long friendId) throws Exception;
+
 }
