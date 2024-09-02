@@ -3,6 +3,7 @@ package com.luanr.user_service.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.luanr.user_service.model.Activity;
 import com.luanr.user_service.model.User;
 
 public interface UserService {
@@ -19,5 +20,7 @@ public interface UserService {
     List<User> findByName(String name);
 
     Optional<User> addFriendById(Long id, Long friendId) throws Exception;
+
+    void addInboxById(Long id, Activity message) throws Exception;
 
 }

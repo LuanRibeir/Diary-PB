@@ -5,11 +5,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.luanr.user_service.model.Activity;
 import com.luanr.user_service.model.Friend;
 import com.luanr.user_service.model.User;
 import com.luanr.user_service.repository.UserRepository;
 import com.luanr.user_service.service.UserService;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -75,6 +77,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         
         return userRepository.findById(id);
+    }
+
+    @Override
+    public void addInboxById(Long id, Activity message) throws Exception {
+        User user = userRepository.findById(id).orElseThrow(() -> new Exception("User not found with ID: " + id));
+
+        user.getInbox().add(message);
+        userRepository.save(user);
     }
 
 }

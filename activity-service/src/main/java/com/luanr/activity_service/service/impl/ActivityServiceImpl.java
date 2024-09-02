@@ -5,7 +5,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.luanr.activity_service.model.Activity;
+import com.luanr.activity_service.rabbitMq.ActivityProducer;
 import com.luanr.activity_service.repository.ActivityRepository;
 import com.luanr.activity_service.service.ActivityService;
 
@@ -15,10 +17,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
+    private final ActivityProducer activityProducer;
 
     @Override
-    public Activity add(Activity activity) {
-        return activityRepository.save(activity);
+    public Activity add(Activity activity) throws JsonProcessingException {
+        Activity act = activityRepository.save(activity);
+        activityProducer.send(activity);
+        return act;
     }
 
     @Override

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/activity")
-@Slf4j
 public class ActivityController {
     private final ActivityService activityService;
 
@@ -31,13 +30,8 @@ public class ActivityController {
     @PostMapping("/")
     public ResponseEntity<?> add(@RequestBody Activity activity) {
         try {
-            log.info("ACTIVITY: {}", activity);
-            log.info("Test API {}", userClient.findById(1L));
-
             String name = userClient.findById(activity.getUserId()).getName();
-
             activity.setName(name);
-
             return new ResponseEntity<>(activityService.add(activity), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
