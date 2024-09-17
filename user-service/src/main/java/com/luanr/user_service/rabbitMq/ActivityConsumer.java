@@ -14,7 +14,9 @@ import com.luanr.user_service.service.UserService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 public class ActivityConsumer {
@@ -25,6 +27,8 @@ public class ActivityConsumer {
     @Transactional
     public void receive(@Payload String message) throws Exception {
         try {
+            log.info("Processing activity message");
+
             Activity activity = objectMapper.readValue(message, Activity.class);
             Long actUserId = activity.getUserId();
 
@@ -40,8 +44,10 @@ public class ActivityConsumer {
                     userService.addInboxById(user.getId(), activity);
                 }
             }
+
+            log.info("Message processed sucsessfuly.");
         } catch (Exception e) {
-            System.err.println("Error processing message: " + e.getMessage());
+            log.error("Error processing message: " + e.getMessage());
             e.printStackTrace();
         }
     }
