@@ -11,4 +11,7 @@ import com.luanr.user_service.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.name = :name")
     List<User> findByName(@Param("name") String name);
+
+    @Query("SELECT u FROM User u JOIN u.friends f WHERE f.id = :userId")
+    List<User> findFollowersList(@Param("userId") Long userId);
 }

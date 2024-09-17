@@ -7,17 +7,17 @@ import com.luanr.user_service.model.Activity;
 import com.luanr.user_service.model.User;
 
 public interface UserService {
-    User save(User user);
+    User save(User user) throws Exception;
 
-    List<User> findAll();
+    List<User> findAll() throws Exception;
 
-    Optional<User> findById(Long id);
+    Optional<User> findById(Long id) throws Exception;
 
-    Optional<User> deleteById(Long id);
+    Optional<User> deleteById(Long id) throws Exception;
 
     Optional<User> updateById(Long id, User user) throws Exception;
 
-    List<User> findByName(String name);
+    List<User> findByName(String name) throws Exception;
 
     Optional<User> addFriendById(Long id, Long friendId) throws Exception;
 

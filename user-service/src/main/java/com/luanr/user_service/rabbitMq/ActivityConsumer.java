@@ -21,21 +21,24 @@ public class ActivityConsumer {
     private final UserService userService;
     private final ObjectMapper objectMapper;
 
-    @RabbitListener(queues = {"activity-queue"})
+    @RabbitListener(queues = { "activity-queue" })
     @Transactional
     public void receive(@Payload String message) throws Exception {
         try {
             Activity activity = objectMapper.readValue(message, Activity.class);
+            Long actUserId = activity.getUserId();
 
-            Long userId = activity.getUserId();
+            User actUser = userService.findById(actUserId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found: " + actUserId));
 
-            User user = userService.findById(userId)
-                                   .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+            List<Friend> friends = actUser.getFriends();
+            List<User> users = userService.findAll();
 
-            List<Friend> friends = user.getFriends();
-
-            for (Friend friend : friends) {
-                userService.addInboxById(friend.getId(), activity);
+            for (User user : users) {
+                boolean haveAsFriend = user.getFriends().stream().anyMatch(f -> f.getUserId().equals(actUserId));
+                if (haveAsFriend) {
+                    userService.addInboxById(user.getId(), activity);
+                }
             }
         } catch (Exception e) {
             System.err.println("Error processing message: " + e.getMessage());

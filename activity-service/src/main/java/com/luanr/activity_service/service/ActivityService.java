@@ -9,10 +9,10 @@ import com.luanr.activity_service.model.Activity;
 public interface ActivityService {
     Activity add(Activity activity) throws JsonProcessingException;
 
-    List<Activity> findAll();
+    List<Activity> findAll() throws Exception;
 
     Optional<Activity> updateById(Long id, Activity activity) throws Exception;
 
-    Optional<Activity> deleteById(Long id);
+    Optional<Activity> deleteById(Long id) throws Exception;
 
 }

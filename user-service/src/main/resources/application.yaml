@@ -14,3 +14,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
   application:
     name: user-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
