@@ -7,6 +7,13 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    volumes:
+      - ./definitions.json:/etc/rabbitmq/definitions.json:ro
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    command: rabbitmq-server
   eureka:
     image: luanribeiro/eureka:latest
     container_name: EUREKA-SERVER
@@ -16,20 +23,28 @@ services:
       - diary_pb
   activity:
     image: luanribeiro/activity:latest
+    ports:
+      - "8082:8082"
     networks:
       - diary_pb
     depends_on:
+      - rabbit
       - eureka
   user:
     image: luanribeiro/user:latest
     networks:
       - diary_pb
+    ports:
+      - "8081:8081"
     depends_on:
+      - rabbit
       - eureka
   gateway:
     image: luanribeiro/gateway:latest
     networks:
       - diary_pb
+    ports:
+      - "9999:9999"
     depends_on:
       - eureka
       - user
