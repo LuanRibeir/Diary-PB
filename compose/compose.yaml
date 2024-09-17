@@ -1,0 +1,39 @@
+services:
+  rabbit:
+    image: rabbitmq:3-management
+    container_name: RABBIT-SERVER
+    networks:
+      - diary_pb
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+  eureka:
+    image: luanribeiro/eureka:latest
+    container_name: EUREKA-SERVER
+    ports:
+      - "8761:8761"
+    networks:
+      - diary_pb
+  activity:
+    image: luanribeiro/activity:latest
+    networks:
+      - diary_pb
+    depends_on:
+      - eureka
+  user:
+    image: luanribeiro/user:latest
+    networks:
+      - diary_pb
+    depends_on:
+      - eureka
+  gateway:
+    image: luanribeiro/gateway:latest
+    networks:
+      - diary_pb
+    depends_on:
+      - eureka
+      - user
+      - activity
+networks:
+  diary_pb:
+    driver: bridge
